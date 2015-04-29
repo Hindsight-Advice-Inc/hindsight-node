@@ -10,7 +10,9 @@
   "author": "JSP",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.12.3",
     "express": "^4.12.3",
-    "solr-client": "^0.5.0"
+    "solr-client": "^0.5.0",
+    "uuid": "^2.0.1"
   }
 }
