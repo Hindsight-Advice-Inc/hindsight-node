@@ -19,26 +19,39 @@ app.post('/advisor', function (req, res){
 
 	client.add(input, function(err,obj){
 		if(err){
-			console.log(err);
+			res.send(err)
 		}
 		else{
-			console.log('Solr response:', obj);
 			client.commit();
 		}
+
+		res.send(input);
 	})
 
-	res.send("ok");
 });
 
 
+app.get('/advisor/search', function (req, res){
 
-app.get('/', function (req, res) {
-	var result = {
-		name : req.query.message,
-		date : new Date(),
-	}
-  res.send(result);
-}); 
+	var query = client.createQuery().q(req.query.query);
+	console.log(query)
+	client.search(query,function(err,obj){
+		if (err) {
+			res.send(err);
+			return;
+		}
+		res.send(obj.response.docs);
+	})
+})
+
+app.get('/advisor/:id', function (req, res){
+	var id = req.param('id');
+	var query = client.createQuery().q('id:' + id);
+	client.search(query,function(err, obj){
+		res.send(obj.response.docs[0]);
+
+	})
+})
 
 var server = app.listen(3000, function () {
 

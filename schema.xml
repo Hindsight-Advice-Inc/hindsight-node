@@ -2,12 +2,12 @@
 <schema name="minimal" version="1.1"> 
   <types> 
     <fieldType name="string" class="solr.StrField"/> 
-    <fieldType name="int" class="solr.StrField"/> 
+    <fieldType name="int" class="solr.IntField"/> 
   </types> 
   <fields> 
     <field name="id" type="string" indexed="true" stored="true" required="true" />
     <field name="name" type="string" indexed="true" stored="true" />
-    <field name="year" type="string" indexed="true" stored="true" />
+    <field name="year" type="int" indexed="true" stored="true" />
   </fields> 
     <defaultSearchField>id</defaultSearchField>
     <uniqueKey>id</uniqueKey> 
