@@ -1,10 +1,18 @@
 var uuid = require("uuid")
 var neo = require("./neo.js")
+var session = require("./session")
 
 module.exports = function(app) {
 
-	app.get("/me", function(req, res) {
-		
+	app.get("/me", session, function(req, res) {
+		res.send(req.user)
+	})
+
+	app.post("/me/story", function(req, res) {
+		var story = req.body;
+
+		neo.cypher
+
 	})
 
 	app.post('/me', function (req, res){
@@ -12,7 +20,6 @@ module.exports = function(app) {
 		if(!input.id){
 			input.id = uuid.v4();
 		}
-		console.log(input)
 		neo.cypher({
 	    	query: 'MERGE (n:User {id :{id} }) SET n.email = {email}, n.name = {name}',
 	    	params: {

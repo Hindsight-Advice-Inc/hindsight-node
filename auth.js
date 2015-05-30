@@ -2,6 +2,7 @@ var neo = require("./neo.js")
 var uuid = require("uuid")
 module.exports = function(app) {
 
+
 	app.post('/auth/login', function (req, res){
 
 		var input = req.body;
@@ -18,8 +19,7 @@ module.exports = function(app) {
 				return
 			}
 
-			var user = results[0].u.id;
-			console.log(JSON.stringify(results))
+			var user = results[0].u.properties.id;
 			var session = uuid.v4()
 
 			neo.cypher({
@@ -48,12 +48,14 @@ module.exports = function(app) {
 
 	app.post('/auth/logout', function (req, res) {
 		var session = req.query.session
+		
 		neo.cypher({
-		query: 'MATCH (s:Session { id: {session} })-[l:LOGIN]->(:User) DELETE l,s'
-		params : {
-			session: session
-		}
-	}, function(err, results) {
-		res.send();
+			query: 'MATCH (s:Session { id: {session} })-[l:LOGIN]->(:User) DELETE l,s',
+			params : {
+				session: session
+			}
+		}, function(err, results) {
+			res.send();
+		})
 	})
 }
