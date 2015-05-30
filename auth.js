@@ -48,7 +48,12 @@ module.exports = function(app) {
 
 	app.post('/auth/logout', function (req, res) {
 		var session = req.query.session
-
-
+		neo.cypher({
+		query: 'MATCH (s:Session { id: {session} })-[l:LOGIN]->(:User) DELETE l,s'
+		params : {
+			session: session
+		}
+	}, function(err, results) {
+		res.send();
 	})
 }
