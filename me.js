@@ -21,12 +21,8 @@ module.exports = function(app) {
 			input.id = uuid.v4();
 		}
 		neo.cypher({
-	    	query: 'MERGE (n:User {id :{id} }) SET n.email = {email}, n.name = {name}',
-	    	params: {
-	        	id: input.id,
-	        	email: input.email,
-	        	name: input.name,
-	    	},
+	    	query: 'MERGE (n:User {id :{id} }) SET n.email = {email}, n.name = {name}, n.story = {story}',
+	    	params: input,
 		}, function (err, results) {
 		    if (err) throw err;
 		    res.send(input);
