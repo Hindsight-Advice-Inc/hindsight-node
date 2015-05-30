@@ -29,6 +29,10 @@ module.exports = function(app) {
 		});
 	});
 
+	app.post("/me/event", function(req,res) {
+		var input = req.body;
+	})
+
 	app.post("/me/request/:user", function(req, res) {
 
 		neo.cypher({
