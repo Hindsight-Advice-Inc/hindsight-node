@@ -24,7 +24,7 @@ module.exports = function(app) {
 				"OPTIONAL MATCH (u)-[ti:HAS_TEST]->(t:Test) " +
 				"OPTIONAL MATCH (u)-[si:HAS_SCHOOL]->(s:School) " +
 				"OPTIONAL MATCH (u)-[ei:HAS_EMPLOYER]->(e:Employer) " +
-				"return u, collect(ti) as testInfo, collect(t) as test, collect(si) as schoolInfo, collect(s) as school, collect(ei) as employerInfo, collect(e) as employer"
+				"return u, collect(DISTINCT ti) as testInfo, collect(t) as test, collect(DISTINCT si) as schoolInfo, collect(s) as school, collect(DISTINCT ei) as employerInfo, collect(e) as employer"
 		}, function(err, results) {
 			if(err) {
 				res.status(500);
