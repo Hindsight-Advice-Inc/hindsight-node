@@ -21,9 +21,9 @@ module.exports = function(app) {
 		neo.cypher({
 			query : 
 				"MATCH (u:User { id : '456'} ) " + 
-				"OPTIONAL MATCH (u)-[ti:HAS_TEST]-(t:Test) " +
-				"OPTIONAL MATCH (u)-[si:HAS_SCHOOL]-(s:SCHOOL) " +
-				"OPTIONAL MATCH (u)-[ei:HAS_EMPLOYER]-(e:Employer) " +
+				"OPTIONAL MATCH (u)-[ti:HAS_TEST]->(t:Test) " +
+				"OPTIONAL MATCH (u)-[si:HAS_SCHOOL]->(s:School) " +
+				"OPTIONAL MATCH (u)-[ei:HAS_EMPLOYER]->(e:Employer) " +
 				"return u, collect(ti) as testInfo, collect(t) as test, collect(si) as schoolInfo, collect(s) as school, collect(ei) as employerInfo, collect(e) as employer"
 		}, function(err, results) {
 			if(err) {
