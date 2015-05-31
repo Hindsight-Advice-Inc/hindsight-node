@@ -18,7 +18,7 @@ module.exports = function(app) {
 		}, function(err, results) {
 			if(err) {
 				res.status(500);
-				res.send();
+				res.send(err);
 				return;
 			}
 
@@ -42,7 +42,7 @@ module.exports = function(app) {
 		}, function(err, results) {
 			if(err) {
 				res.status(500);
-				res.send();
+				res.send(err);
 				return;
 			}
 
@@ -66,7 +66,7 @@ module.exports = function(app) {
 		}, function(err, results) {
 			if(err) {
 				res.status(500);
-				res.send();
+				res.send(err);
 				return;
 			}
 
