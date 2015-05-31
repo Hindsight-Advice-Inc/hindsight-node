@@ -11,8 +11,8 @@ module.exports = function(app) {
 			query += "MATCH (u)-[:HAS_SCHOOL]->(:School { id : {school} }) "
 			params.school = req.query.school
 		}
-
-		query += "return u, collect(DISTINCT s) as school"
+		query += "OPTIONAL MATCH (u)-[t:HAS_TEST]->(:Test) "
+		query += "return u, collect(DISTINCT s) as school, collect(DISTINCT t) as test"
 
 		neo.cypher({
 			query : query,
@@ -27,8 +27,11 @@ module.exports = function(app) {
 			var payload = result.map(function(row) {
 				var result = row.u.properties;
 				delete result.password;
-				result.school = row.school.map(function(school) {
-					return school.properties;
+				result.school = row.school.map(function(node) {
+					return node.properties;
+				})
+				result.test = row.test.map(function(node) {
+					return node.properties;
 				})
 				return result;
 			})
