@@ -21,11 +21,12 @@ module.exports = function(app) {
 		neo.cypher({
 			query : 
 				"MATCH (u:User { id : '456'} ) " + 
-				"OPTIONAL MATCH (u)-[ti:HAS_TEST]->(t:Test) " +
-				"OPTIONAL MATCH (u)-[si:HAS_SCHOOL]->(s:School) " +
-				"OPTIONAL MATCH (u)-[ei:HAS_EMPLOYER]->(e:Employer) " +
-				"return u, collect(DISTINCT ti) as testInfo, collect(t) as test, collect(DISTINCT si) as schoolInfo, collect(s) as school, collect(DISTINCT ei) as employerInfo, collect(e) as employer"
+				"OPTIONAL MATCH (u)-[t:HAS_TEST]->(:Test) " +
+				"OPTIONAL MATCH (u)-[s:HAS_SCHOOL]->(:School) " +
+				"OPTIONAL MATCH (u)-[e:HAS_EMPLOYER]->(:Employer) " +
+				"return u, collect(DISTINCT t) as test, collect(DISTINCT s) as school, collect(DISTINCT e) as employer"
 		}, function(err, results) {
+
 			if(err) {
 				res.status(500);
 				res.send(err);
@@ -44,8 +45,7 @@ module.exports = function(app) {
 			fields.forEach(function(field, i) {
 				payload[field] = [];
 				result[field].forEach(function(obj,i) {
-					var match = result[field + "Info"][i].properties;
-					match[field] = obj.properties.id;
+					var match = obj.properties;
 					match.type = field;
 					payload[field].push(match);
 				})
