@@ -46,7 +46,7 @@ module.exports = function(app) {
 				result[field].forEach(function(obj,i) {
 					var match = result[field + "Info"][i].properties;
 					match[field] = obj.properties.id;
-					payload.type = field;
+					match.type = field;
 					payload[field].push(match);
 				})
 			})
