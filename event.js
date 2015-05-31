@@ -12,7 +12,7 @@ module.exports = function(app) {
 		neo.cypher({
 			query : 
 				"MATCH (u:User {id : {user} ]) " +
-				"MERGE (s:School {id : {school} ]) " + 
+				"MERGE (s:School {id : {school} } ) " + 
 				"CREATE (u)-[:HAS_SCHOOL { year : {year}, major : {major}, degree : {degree} } ]->(s) ",
 			params : input
 		}, function(err, results) {
