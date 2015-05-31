@@ -28,12 +28,13 @@ module.exports = function(app) {
 		neo.cypher({
 			query :
 				'MATCH (u:User {id : {user} }) ' +
-				'CREATE (e:Event { title : {title}, description : {description}, type : {type} }) ' +
+				'CREATE (e:Event { title : {title}, description : {description}, type : {type}, year : {year} }) ' +
 				'CREATE  (u)-[:HAS_EVENT]->(e) ',
 			params : {
 				title : input.title,
 				description : input.description,
 				type : input.type,
+				year: input.year,
 				user : req.user.id
 			}
 		}, function(err, results) {
