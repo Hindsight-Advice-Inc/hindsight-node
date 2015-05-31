@@ -14,7 +14,7 @@ module.exports = function(app) {
 			query : 
 				"MATCH (u:User {id : {user} }) " +
 				"MERGE (s:School {id : {school} } ) " + 
-				"CREATE (u)-[:HAS_SCHOOL { id : {id}, school : {school}, year : {year}, major : {major}, degree : {degree} }]->(s) ",
+				"CREATE (u)-[:HAS_SCHOOL { id : {id}, gpa : {gpa}, school : {school}, year : {year}, major : {major}, degree : {degree} }]->(s) ",
 			params : input
 		}, function(err, results) {
 			if(err) {
