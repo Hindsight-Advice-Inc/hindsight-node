@@ -4,15 +4,37 @@ module.exports = function(app) {
 
 
 	app.get('/advisor/search', function (req, res){
+		var params = {};
+		var query = "MATCH (u:User), (u)-[s:HAS_SCHOOL]->(:School) ";
 
-		var query = client.createQuery().q(req.query.query);
-		console.log(query)
-		client.search(query,function(err,obj){
-			if (err) {
+		if(req.query.school) {
+			query += "MATCH (u)-[:HAS_SCHOOL]->(:School { id : {school} }) "
+			params.school = req.query.school
+		}
+
+		query += "return u, collect(DISTINCT s) as school"
+
+		neo.cypher({
+			query : query,
+			params : params
+		}, function(err, result) {
+			if(err) {
+				res.status(500);
 				res.send(err);
 				return;
 			}
-			res.send(obj.response.docs);
+
+			var payload = result.map(function(row) {
+				var result = row.u.properties;
+				delete result.password;
+				result.school = row.school.map(function(school) {
+					return school.properties;
+				})
+				return result;
+			})
+
+			res.send(payload)
+
 		})
 	})
 
