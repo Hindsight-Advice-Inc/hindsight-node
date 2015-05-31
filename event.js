@@ -83,7 +83,10 @@ module.exports = function(app) {
 
 		neo.cypher({
 			query : 
-				"MATCH (u:User)-[r { id : {id} }]-(n) DELETE r,n"
+				"MATCH (u:User)-[r { id : {id} }]-(n) DELETE r,n",
+			params : {
+				id : id
+			}
 		}, function(err, results) {
 			if(err) {
 				res.status(500)
