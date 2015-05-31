@@ -8,12 +8,13 @@ module.exports = function(app) {
 		
 		var input = req.body;
 		input.user = req.user.id;
+		input.id = uuid.v4();
 
 		neo.cypher({
 			query : 
 				"MATCH (u:User {id : {user} }) " +
 				"MERGE (s:School {id : {school} } ) " + 
-				"CREATE (u)-[:HAS_SCHOOL { school : {school}, year : {year}, major : {major}, degree : {degree} }]->(s) ",
+				"CREATE (u)-[:HAS_SCHOOL { id : {id}, school : {school}, year : {year}, major : {major}, degree : {degree} }]->(s) ",
 			params : input
 		}, function(err, results) {
 			if(err) {
@@ -32,12 +33,13 @@ module.exports = function(app) {
 
 		var input = req.body;
 		input.user = req.user.id;
+		input.id = uuid.v4();
 
 		neo.cypher({
 			query :
 				"MATCH (u:User {id : {user} }) " +
 				"MERGE (e:Employer { id : {employer} } ) " +
-				"CREATE (u)-[:HAS_EMPLOYER { employer : {employer}, year : {year}, position : {position} }]->(e)",
+				"CREATE (u)-[:HAS_EMPLOYER { id : {id}, employer : {employer}, year : {year}, position : {position} }]->(e)",
 			params : input
 		}, function(err, results) {
 			if(err) {
@@ -56,12 +58,13 @@ module.exports = function(app) {
 
 		var input = req.body;
 		input.user = req.user.id;
+		input.id = uuid.v4();
 
 		neo.cypher({
 			query :
 				"MATCH (u:User {id : {user} }) " +
 				"MERGE (t:Test { id : {test} } ) " +
-				"CREATE (u)-[:HAS_TEST { test : {test}, year : {year}, score : {score} }]->(t)",
+				"CREATE (u)-[:HAS_TEST { id : {id}, test : {test}, year : {year}, score : {score} }]->(t)",
 			params : input
 		}, function(err, results) {
 			if(err) {
