@@ -8,13 +8,6 @@ module.exports = function(app) {
 		res.send(req.user)
 	})
 
-	app.post("/me/story", function(req, res) {
-		var story = req.body;
-
-		neo.cypher
-
-	})
-
 	app.post('/me', function (req, res){
 		var input = req.body;
 		if(!input.id){
@@ -29,8 +22,10 @@ module.exports = function(app) {
 		});
 	});
 
-	app.post("/me/event", function(req,res) {
+	app.post("/me/event", session, function(req,res) {
 		var input = req.body;
+		var user = req.user;
+
 	})
 
 	app.post("/me/request/:user", function(req, res) {
