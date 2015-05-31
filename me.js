@@ -22,30 +22,6 @@ module.exports = function(app) {
 		});
 	});
 
-	app.post("/me/event", session, function(req,res) {
-		var input = req.body;
-
-		neo.cypher({
-			query :
-				'MATCH (u:User {id : {user} }) ' +
-				'CREATE (e:Event { title : {title}, description : {description}, type : {type} }) ' +
-				'CREATE  (u)-[:HAS_EVENT]->(e) ',
-			params : {
-				title : input.title,
-				description : input.description,
-				type : input.type,
-				user : req.user.id
-			}
-		}, function(err, results) {
-			if(err){
-				res.status(500)
-				res.send(err)
-			}
-			res.send(input)
-		})
-
-	})
-
 	app.post("/me/request/:user", function(req, res) {
 
 		neo.cypher({

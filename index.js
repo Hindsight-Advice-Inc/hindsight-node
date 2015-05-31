@@ -7,6 +7,7 @@ app.use(require("cors")())
 require("./me.js")(app)
 require("./auth.js")(app)
 require("./advisor.js")(app)
+require("./event.js")(app)
 
 var server = app.listen(3000, function () {
 
