@@ -34,8 +34,7 @@ module.exports = function(app) {
 			}
 
 			var result = results[0]
-			var payload = {};
-			payload.user = {
+			var payload = {
 				name : result.u.properties.name,
 				story : result.u.properties.story
 			}
