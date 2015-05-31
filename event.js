@@ -19,6 +19,7 @@ module.exports = function(app) {
 			if(err) {
 				res.status(500);
 				res.send();
+				return;
 			}
 
 			res.send(input);
@@ -42,6 +43,7 @@ module.exports = function(app) {
 			if(err) {
 				res.status(500);
 				res.send();
+				return;
 			}
 
 			res.send(input);
@@ -65,6 +67,7 @@ module.exports = function(app) {
 			if(err) {
 				res.status(500);
 				res.send();
+				return;
 			}
 
 			res.send(input);
