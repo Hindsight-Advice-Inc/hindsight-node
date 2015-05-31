@@ -78,4 +78,20 @@ module.exports = function(app) {
 
 	})
 
+	app.post("/me/event/:id/delete", session, function(req, res) {
+		var id = req.params.id;
+
+		neo.cypher({
+			query : 
+				"MATCH (u:User)-[r { id : {id} }]-(n) DELETE r,n"
+		}, function(err, results) {
+			if(err) {
+				res.status(500)
+				res.send(err)
+				return err;
+			}
+			return res.send()
+		})
+	})
+
 }
