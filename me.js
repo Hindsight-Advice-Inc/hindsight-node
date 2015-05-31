@@ -24,7 +24,25 @@ module.exports = function(app) {
 
 	app.post("/me/event", session, function(req,res) {
 		var input = req.body;
-		var user = req.user;
+
+		neo.cypher({
+			query :
+				'CREATE (e:Event { title : {title}, description : {description}, type : {type} }) ' +
+				'MATCH (u:User {id : {user} })' +
+				'CREATE  (u)-[:HAS_EVENT]->(e)',
+			params : {
+				title : input.title,
+				description : input.description,
+				type : input.type,
+				user : req.user.id
+			}
+		}, function(err, results) {
+			if(err){
+				res.status(500)
+				res.send(err)
+			}
+			res.send(input)
+		})
 
 	})
 
