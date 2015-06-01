@@ -60,6 +60,7 @@ module.exports = function(app) {
 
 			var result = results[0]
 			var payload = {
+				id : result.u.properties.id,
 				name : result.u.properties.name,
 				story : result.u.properties.story
 			}
