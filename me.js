@@ -26,7 +26,7 @@ module.exports = function(app) {
 		var data = req.body.data;
 
 		neo.cypher({
-			query : "MATCH (n:User {id : {id} }) SET " + req.params.prop + "={data} "
+			query : "MATCH (n:User {id : {id} }) SET " + req.params.prop + "={data} ",
 			params : {
 				data : data
 			}
@@ -38,7 +38,7 @@ module.exports = function(app) {
 			}
 		})
 
-	}))
+	})
 
 	app.post("/me/request/:user", function(req, res) {
 
