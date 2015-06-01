@@ -45,11 +45,14 @@ module.exports = function(app) {
 		var id = req.query.id;
 		neo.cypher({
 			query : 
-				"MATCH (u:User { id : '456'} ) " + 
+				"MATCH (u:User { id : {id} } ) " + 
 				"OPTIONAL MATCH (u)-[t:HAS_TEST]->(:Test) " +
 				"OPTIONAL MATCH (u)-[s:HAS_SCHOOL]->(:School) " +
 				"OPTIONAL MATCH (u)-[e:HAS_EMPLOYER]->(:Employer) " +
-				"return u, collect(DISTINCT t) as test, collect(DISTINCT s) as school, collect(DISTINCT e) as employer"
+				"return u, collect(DISTINCT t) as test, collect(DISTINCT s) as school, collect(DISTINCT e) as employer",
+			params : {
+				id : id
+			}
 		}, function(err, results) {
 
 			if(err) {
