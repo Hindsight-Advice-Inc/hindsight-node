@@ -43,21 +43,25 @@ module.exports = function(app) {
 
 	})
 
-	app.post("/me/request/:user", function(req, res) {
+	app.post("/me/request/:user", session, function(req, res) {
+
+		var params = req.input;
+		params.rid = uuid.v4();
+		params.me = session.user.id;
+		params.tid = req.params.user;
 
 		neo.cypher({
 	    	query: 
 	    		'MATCH (me:User { id : {me} } ), (target:User {id: {tid}} ) ' +
-	    		'MERGE (r:Request { id : {rid}, paid : false, accepted : false }) ' + 
+	    		'MERGE (r:Request { id : {rid}, paid : false, accepted : false, essay : {essay}, qa : {qa}, advice : {advice}, message : {message} } }) ' + 
 	    		'CREATE UNIQUE (me)-[:CREATE_REQUEST]->(r)<-[:HAS_REQUEST]-(target)',
-	    	params: {
-	        	rid: uuid.v4(),
-	        	me : "123",
-	        	tid : "456"
-	    	},
+	    	params: params,
 		}, function (err, results) {
-		    if (err) throw err;
-		    res.send("ok");
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
+		    res.send();
 		});
 	});
 
@@ -66,7 +70,7 @@ module.exports = function(app) {
 		neo.cypher({
 			query: 'MATCH (r:Request {id : {rid}}) SET r.accepted = true',
 			params : {
-				rid : "bf7ff0a4-e067-46b1-9c5e-c189e92ce848"
+				rid : req.params.request
 			}
 		}, function (err, results) {
 			if(err) throw err;
@@ -78,7 +82,7 @@ module.exports = function(app) {
 		neo.cypher({
 			query: 'MATCH (r:Request {id : {rid}}) SET r.paid = true',
 			params : {
-				rid : "bf7ff0a4-e067-46b1-9c5e-c189e92ce848"
+				rid : req.params.request
 			}
 		}, function (err, results) {
 			if(err) throw err;
