@@ -43,9 +43,36 @@ module.exports = function(app) {
 
 	})
 
+	app.get("/me/request/pending", session, function(req, res) {
+		neo.cypher({
+			query : 
+				"MATCH (u:User { id : {me} })-[:CREATE_REQUEST]->(request:Request)<-[:HAS_REQUEST)-(target) " + 
+				"return request, target",
+			params : {
+				me : req.user.id
+			}
+		}, function(err, results) {
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
+
+		    var payload = results.map(function(r) {
+		    	return {
+		    		request : r.request.properties,
+		    		target : r.target.properties,
+		    	}
+		    })
+
+		    res.send(payload);
+
+
+		})
+	})
+
 	app.post("/me/request/:user", session, function(req, res) {
 
-		var params = req.input;
+		var params = req.body;
 		params.rid = uuid.v4();
 		params.me = session.user.id;
 		params.tid = req.params.user;
@@ -53,7 +80,7 @@ module.exports = function(app) {
 		neo.cypher({
 	    	query: 
 	    		'MATCH (me:User { id : {me} } ), (target:User {id: {tid}} ) ' +
-	    		'MERGE (r:Request { id : {rid}, paid : false, accepted : false, essay : {essay}, qa : {qa}, advice : {advice}, message : {message} } }) ' + 
+	    		'MERGE (r:Request { created : timestamp(), id : {rid}, paid : false, accepted : false, essay : {essay}, qa : {qa}, advice : {advice}, message : {message} } }) ' + 
 	    		'CREATE UNIQUE (me)-[:CREATE_REQUEST]->(r)<-[:HAS_REQUEST]-(target)',
 	    	params: params,
 		}, function (err, results) {
@@ -65,7 +92,7 @@ module.exports = function(app) {
 		});
 	});
 
-	app.post("/me/accept/:request", function(req, res){
+	app.post("/me/request/:request/accept", session, function(req, res){
 
 		neo.cypher({
 			query: 'MATCH (r:Request {id : {rid}}) SET r.accepted = true',
@@ -73,21 +100,29 @@ module.exports = function(app) {
 				rid : req.params.request
 			}
 		}, function (err, results) {
-			if(err) throw err;
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
 			res.send("ok")
 		})
 	})
 
-	app.post("/me/pay/:request", function(req, res){
+	app.post("/me/:request/pay", session, function(req, res){
 		neo.cypher({
 			query: 'MATCH (r:Request {id : {rid}}) SET r.paid = true',
 			params : {
 				rid : req.params.request
 			}
 		}, function (err, results) {
-			if(err) throw err;
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
 			res.send("ok")
 		})
 	})
+
+
 }
 
