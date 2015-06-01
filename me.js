@@ -26,13 +26,13 @@ module.exports = function(app) {
 		var data = req.body.data;
 
 		neo.cypher({
-			query : "MATCH (n:User {id : {id} }) SET " + req.params.prop + "={data} ",
+			query : "MATCH (n:User {id : {id} }) SET n." + req.params.prop + "={data} ",
 			params : {
 				data : data
 			}
 		}, function(err, results) {
 			if(err) {
-				res.stats(500)
+				res.status(500)
 				res.send(err)
 				return
 			}
