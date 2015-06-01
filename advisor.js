@@ -42,7 +42,7 @@ module.exports = function(app) {
 	})
 
 	app.get('/advisor/:id', function (req, res){
-		var id = req.query.id;
+		var id = req.params.id;
 		neo.cypher({
 			query : 
 				"MATCH (u:User { id : {id} } ) " + 
