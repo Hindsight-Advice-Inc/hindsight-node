@@ -37,6 +37,8 @@ module.exports = function(app) {
 				res.send(err)
 				return
 			}
+
+			res.send()
 		})
 
 	})
