@@ -11,6 +11,10 @@ module.exports = function(app) {
 			query += "MATCH (u)-[:HAS_SCHOOL]->(:School { id : {school} }) "
 			params.school = req.query.school
 		}
+		if(req.query.degree) {
+			query += "MATCH (u)-[:HAS_SCHOOL { degree : {degree} }]->(:School) "
+			params.degree = req.query.degree
+		}
 		query += "OPTIONAL MATCH (u)-[t:HAS_TEST]->(:Test) "
 		query += "return u, collect(DISTINCT s) as school, collect(DISTINCT t) as test"
 
