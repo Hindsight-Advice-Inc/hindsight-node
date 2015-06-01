@@ -70,6 +70,60 @@ module.exports = function(app) {
 		})
 	})
 
+	app.get("/me/request/accepted", session, function(req, res) {
+		neo.cypher({
+			query : 
+				"MATCH (u:User { id : {me} } )-[:CREATE_REQUEST]->(request:Request { accepted : true } )<-[:HAS_REQUEST]-(target) " + 
+				"return request, target",
+			params : {
+				me : req.user.id
+			}
+		}, function(err, results) {
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
+
+		    var payload = results.map(function(r) {
+		    	return {
+		    		request : r.request.properties,
+		    		target : r.target.properties,
+		    	}
+		    })
+
+		    res.send(payload);
+
+
+		})
+	})
+
+	app.get("/me/request/paid", session, function(req, res) {
+		neo.cypher({
+			query : 
+				"MATCH (u:User { id : {me} } )-[:CREATE_REQUEST]->(request:Request { paid : true } )<-[:HAS_REQUEST]-(target) " + 
+				"return request, target",
+			params : {
+				me : req.user.id
+			}
+		}, function(err, results) {
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
+
+		    var payload = results.map(function(r) {
+		    	return {
+		    		request : r.request.properties,
+		    		target : r.target.properties,
+		    	}
+		    })
+
+		    res.send(payload);
+
+
+		})
+	})
+
 	app.post("/me/request/create/:user", session, function(req, res) {
 
 		var params = req.body;
@@ -108,6 +162,22 @@ module.exports = function(app) {
 		})
 	})
 
+	app.post("/me/request/:request/delete", session, function(req, res){
+
+		neo.cypher({
+			query: 'MATCH (u)-[a]-(r:Request {id : {rid}})-[b]-() DELETE a,r,b ',
+			params : {
+				rid : req.params.request
+			}
+		}, function (err, results) {
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
+			res.send("ok")
+		})
+	})
+
 	app.post("/me/request/:request/pay", session, function(req, res){
 		neo.cypher({
 			query: 'MATCH (r:Request {id : {rid}}) SET r.paid = true',
@@ -122,6 +192,7 @@ module.exports = function(app) {
 			res.send("ok")
 		})
 	})
+
 
 
 }
