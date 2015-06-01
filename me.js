@@ -22,6 +22,24 @@ module.exports = function(app) {
 		});
 	});
 
+	app.post("/me/modify/:prop", session, function(req.res) {
+		var data = req.body.data;
+
+		neo.cypher({
+			query : "MATCH (n:User {id : {id} }) SET " + req.params.prop + "={data} "
+			params : {
+				data : data
+			}
+		}, function(err, results) {
+			if(err) {
+				res.stats(500)
+				res.send(err)
+				return
+			}
+		})
+
+	}))
+
 	app.post("/me/request/:user", function(req, res) {
 
 		neo.cypher({
