@@ -74,7 +74,7 @@ module.exports = function(app) {
 
 		var params = req.body;
 		params.rid = uuid.v4();
-		params.me = session.user.id;
+		params.me = req.user.id;
 		params.tid = req.params.user;
 
 		neo.cypher({
