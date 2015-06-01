@@ -22,7 +22,7 @@ module.exports = function(app) {
 		});
 	});
 
-	app.post("/me/modify/:prop", session, function(req.res) {
+	app.post("/me/modify/:prop", session, function(req, res) {
 		var data = req.body.data;
 
 		neo.cypher({
