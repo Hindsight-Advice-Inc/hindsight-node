@@ -46,7 +46,7 @@ module.exports = function(app) {
 	app.get("/me/request/pending", session, function(req, res) {
 		neo.cypher({
 			query : 
-				"MATCH (u:User { id : {me} })-[:CREATE_REQUEST]->(request:Request)<-[:HAS_REQUEST)-(target) " + 
+				"MATCH (u:User { id : {me} } )-[:CREATE_REQUEST]->(request:Request { accepted : false } )<-[:HAS_REQUEST]-(target) " + 
 				"return request, target",
 			params : {
 				me : req.user.id
