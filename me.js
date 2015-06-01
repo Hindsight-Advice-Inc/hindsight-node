@@ -70,7 +70,7 @@ module.exports = function(app) {
 		})
 	})
 
-	app.post("/me/request/:user", session, function(req, res) {
+	app.post("/me/request/create/:user", session, function(req, res) {
 
 		var params = req.body;
 		params.rid = uuid.v4();
@@ -108,7 +108,7 @@ module.exports = function(app) {
 		})
 	})
 
-	app.post("/me/:request/pay", session, function(req, res){
+	app.post("/me/request/:request/pay", session, function(req, res){
 		neo.cypher({
 			query: 'MATCH (r:Request {id : {rid}}) SET r.paid = true',
 			params : {
