@@ -134,7 +134,7 @@ module.exports = function(app) {
 		neo.cypher({
 	    	query: 
 	    		'MATCH (me:User { id : {me} } ), (target:User {id: {tid}} ) ' +
-	    		'MERGE (r:Request { created : timestamp(), id : {rid}, paid : false, accepted : false, essay : {essay}, qa : {qa}, advice : {advice}, message : {message} }) ' + 
+	    		'MERGE (r:Request { created : timestamp(), id : {rid}, paid : false, accepted : false, essay : {essay}, qa : {qa}, advice : {advice} }) ' + 
 	    		'CREATE UNIQUE (me)-[:CREATE_REQUEST]->(r)<-[:HAS_REQUEST]-(target)',
 	    	params: params,
 		}, function (err, results) {
