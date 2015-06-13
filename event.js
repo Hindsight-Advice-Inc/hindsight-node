@@ -14,7 +14,7 @@ module.exports = function(app) {
 			query : 
 				"MATCH (u:User {id : {user} }) " +
 				"MERGE (s:School {id : {school} } ) " + 
-				"CREATE (u)-[:HAS_SCHOOL { id : {id}, gpa : {gpa}, school : {school}, year : {year}, major : {major}, degree : {degree} }]->(s) ",
+				"CREATE (u)-[:HAS_SCHOOL { id : {id}, gpa : {gpa}, school : {school}, year : {year}, major : {major}, degree : {degree}, description : {description} }]->(s) ",
 			params : input
 		}, function(err, results) {
 			if(err) {
@@ -39,7 +39,7 @@ module.exports = function(app) {
 			query :
 				"MATCH (u:User {id : {user} }) " +
 				"MERGE (e:Employer { id : {employer} } ) " +
-				"CREATE (u)-[:HAS_EMPLOYER { id : {id}, employer : {employer}, year : {year}, position : {position} }]->(e)",
+				"CREATE (u)-[:HAS_EMPLOYER { id : {id}, employer : {employer}, year : {year}, position : {position}, description : {description} }]->(e)",
 			params : input
 		}, function(err, results) {
 			if(err) {
@@ -64,7 +64,7 @@ module.exports = function(app) {
 			query :
 				"MATCH (u:User {id : {user} }) " +
 				"MERGE (t:Test { id : {test} } ) " +
-				"CREATE (u)-[:HAS_TEST { id : {id}, test : {test}, year : {year}, score : {score} }]->(t)",
+				"CREATE (u)-[:HAS_TEST { id : {id}, test : {test}, year : {year}, score : {score}, description : {description} }]->(t)",
 			params : input
 		}, function(err, results) {
 			if(err) {
