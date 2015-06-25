@@ -43,10 +43,37 @@ module.exports = function(app) {
 
 	})
 
-	app.get("/me/request/pending", session, function(req, res) {
+	app.get("/me/request/sent", session, function(req, res) {
 		neo.cypher({
 			query : 
 				"MATCH (u:User { id : {me} } )-[:CREATE_REQUEST]->(request:Request { accepted : false } )<-[:HAS_REQUEST]-(target) " + 
+				"return request, target",
+			params : {
+				me : req.user.id
+			}
+		}, function(err, results) {
+		    if (err) {
+		    	res.status(500);
+		    	res.send(err)
+		    }
+
+		    var payload = results.map(function(r) {
+		    	return {
+		    		request : r.request.properties,
+		    		target : r.target.properties,
+		    	}
+		    })
+
+		    res.send(payload);
+
+
+		})
+	})
+
+	app.get("/me/request/received", session, function(req, res) {
+		neo.cypher({
+			query : 
+				"MATCH (target:User)-[:CREATE_REQUEST]->(request:Request { accepted : false } )<-[:HAS_REQUEST]-(u:User  { id : {me} } ) " + 
 				"return request, target",
 			params : {
 				me : req.user.id
