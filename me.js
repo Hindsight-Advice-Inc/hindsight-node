@@ -100,7 +100,7 @@ module.exports = function(app) {
 	app.get("/me/request/accepted", session, function(req, res) {
 		neo.cypher({
 			query : 
-				"MATCH (u:User { id : {me} } )-[:CREATE_REQUEST]->(request:Request { accepted : true } )<-[:HAS_REQUEST]-(target) " + 
+				"MATCH (u:User { id : {me} } )-[:CREATE_REQUEST]->(request:Request { accepted : true, paid : false } )<-[:HAS_REQUEST]-(target) " + 
 				"return request, target",
 			params : {
 				me : req.user.id
@@ -176,9 +176,10 @@ module.exports = function(app) {
 	app.post("/me/request/:request/accept", session, function(req, res){
 
 		neo.cypher({
-			query: 'MATCH (r:Request {id : {rid}}) SET r.accepted = true',
+			query: 'MATCH (:User { id : {me} } )-[:HAS_REQUEST]->(r:Request {id : {rid}}) SET r.accepted = true',
 			params : {
-				rid : req.params.request
+				rid : req.params.request,
+				me : req.user.id
 			}
 		}, function (err, results) {
 		    if (err) {
@@ -192,9 +193,10 @@ module.exports = function(app) {
 	app.post("/me/request/:request/delete", session, function(req, res){
 
 		neo.cypher({
-			query: 'MATCH (u)-[a]-(r:Request {id : {rid}})-[b]-() DELETE a,r,b ',
+			query: 'MATCH (:User { id : {me} })-[a]-(r:Request {id : {rid}})-[b]-() DELETE a,r,b ',
 			params : {
-				rid : req.params.request
+				rid : req.params.request,
+				me : req.user.id
 			}
 		}, function (err, results) {
 		    if (err) {
@@ -207,9 +209,10 @@ module.exports = function(app) {
 
 	app.post("/me/request/:request/pay", session, function(req, res){
 		neo.cypher({
-			query: 'MATCH (r:Request {id : {rid}}) SET r.paid = true',
+			query: 'MATCH (:User { id : {me} })-[:CREATE_REQUEST]->(r:Request {id : {rid}}) SET r.paid = true',
 			params : {
-				rid : req.params.request
+				rid : req.params.request,
+				me : req.user.id
 			}
 		}, function (err, results) {
 		    if (err) {
